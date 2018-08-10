@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn import linear_model
 
-train = pd.read_csv('train.csv')
-test = pd.read_csv('test.csv')
+def main():
 
+    train = pd.read_csv('train.csv')
+    test = pd.read_csv('test.csv')
+
+main()
