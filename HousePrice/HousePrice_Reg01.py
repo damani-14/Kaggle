@@ -50,7 +50,7 @@ def main():
     print(corr['SalePrice'].sort_values(ascending=False)[-5:], '\n')
 
 
-        # Visualizing the Positive Correlations
+        # Visualizing Positive Correlations
 
     print("Overall Quality: \n", train.OverallQual.unique(), "\n")
     print("Above Ground Living Area (ft-sq): \n", train.GrLivArea.unique(), "\n")
@@ -84,7 +84,7 @@ def main():
     # NOTE: Outliers @ 1200+
 
 
-        # Visualizing the Negative Correlations
+        # Visualizing Negative Correlations
 
     print('Year Sold: \n', train.YrSold.unique(), '\n')
     print('Overall Condition: \n', train.OverallCond.unique(), '\n')
@@ -170,5 +170,16 @@ def main():
     plt.ylabel('Median Sale Price')
     plt.title('Outliers Removed')
     plt.show()
+
+    # Handling Null Values
+    #---------------------
+
+        # Visualizing Nulls
+    nulls = pd.DataFrame(train.isnull().sum().sort_values(ascending=False)[:25])
+    nulls.columns = ['Null Count']
+    nulls.index.name = 'PREDICTOR'
+    print(nulls)
+
+    
 
 main()
