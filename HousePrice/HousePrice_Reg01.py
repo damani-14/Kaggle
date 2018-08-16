@@ -40,8 +40,8 @@ def main():
     # Quantitative Variables
     #-----------------------
 
-    numeric_features = train.select_dtypes(include = (np.number))
-    corr = numeric_features.corr()
+    quant_feat = train.select_dtypes(include = (np.number))
+    corr = quant_feat.corr()
 
 
         # Investigating the most positive and most negative correlated variables
@@ -171,6 +171,8 @@ def main():
     plt.title('Outliers Removed')
     plt.show()
 
+
+
     # Handling Null Values
     #---------------------
 
@@ -179,6 +181,12 @@ def main():
     nulls.columns = ['Null Count']
     nulls.index.name = 'PREDICTOR'
     print(nulls)
+
+    # Handling Non-Numeric Variables
+    #-------------------------------
+
+    qual_feat = train.select_dtypes(exclude=[np.number])
+    qual_feat.describe()
 
     
 
