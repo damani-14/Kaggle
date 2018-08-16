@@ -37,8 +37,8 @@ def main():
 # Feature Selection
 #------------------
 
-    # Quantitative Variables
-    #-----------------------
+    # Handling Numeric Variables
+    #---------------------------
 
     quant_feat = train.select_dtypes(include = (np.number))
     corr = quant_feat.corr()
@@ -188,6 +188,6 @@ def main():
     qual_feat = train.select_dtypes(exclude=[np.number])
     qual_feat.describe()
 
-    
+
 
 main()
