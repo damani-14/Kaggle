@@ -1,9 +1,8 @@
 # ENCODING:
-    # One-Hot selection is determined on the median response value associated with each class
+    # One-Hot selection is determined by the median response value associated with each class
     # of each predictor. Note that some features have 2+ classes for which median is higher than
     # most. In these instances, the highest median response value is used.
 
-#-----------------------------------------------------------------------------------
 # TAGS:
 #  'MSZoning' 'Street' 'Alley' 'LotShape' 'LandContour' 'Utilities'
 #  'LotConfig' 'LandSlope' 'Neighborhood' 'Condition1' 'Condition2'
@@ -14,11 +13,12 @@
 #  'Functional' 'FireplaceQu' 'GarageType' 'GarageFinish' 'GarageQual'
 #  'GarageCond' 'PavedDrive' 'PoolQC' 'Fence' 'MiscFeature' 'SaleType'
 #  'SaleCondition'
-#-----------------------------------------------------------------------------------
+
 import pandas as pd
 import numpy as np
 
 def encode(train,test):
+
     # Feature Class = 2
     #------------------
 
@@ -27,9 +27,6 @@ def encode(train,test):
 
     train['enc_Alley'] = pd.get_dummies(train.Alley, drop_first=True)
     test['enc_Alley'] = pd.get_dummies(test.Alley, drop_first=True)
-
-#    train['enc_Utilities'] = pd.get_dummies(train.Utilities)
-#    test['enc_Utilities'] = pd.get_dummies(test.Utilities)
 
     train['enc_CentralAir'] = pd.get_dummies(train.CentralAir, drop_first=True)
     test['enc_CentralAIr'] = pd.get_dummies(test.CentralAir, drop_first=True)
