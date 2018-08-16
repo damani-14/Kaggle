@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn import linear_model
 
 def main():
-
 #-----------------
 # Data Exploration
 #-----------------
@@ -18,10 +16,10 @@ def main():
 
     # Set plot parameters
     plt.style.use(style='ggplot')
-    plt.rcParams['figure.figsize'] = (5, 3)
+    plt.rcParams['figure.figsize'] = (7, 5)
 
     # Investigating response distribution
-    plt.hist(train.SalePrice, color='blue')
+    plt.hist(train.SalePrice, color='green')
     plt.show()
 
         # NOTE: Response variable is skewed
@@ -33,9 +31,9 @@ def main():
         # Check
     print(train.SalePrice.skew(),'\n')
 
-#------------------
-# Feature Selection
-#------------------
+#--------------------
+# Feature Engineering
+#--------------------
 
     # Handling Numeric Variables
     #---------------------------
@@ -44,7 +42,7 @@ def main():
     corr = quant_feat.corr()
 
 
-        # Investigating the most positive and most negative correlated variables
+        # Investigating Correlations
 
     print(corr['SalePrice'].sort_values(ascending=False)[:5], '\n')
     print(corr['SalePrice'].sort_values(ascending=False)[-5:], '\n')
@@ -59,7 +57,7 @@ def main():
 
     quality_pivot = train.pivot_table(index='OverallQual',
                                    values='SalePrice',aggfunc=np.median)
-    quality_pivot.plot(kind='bar', color='blue')
+    quality_pivot.plot(kind='bar', color='green')
     plt.xlabel('Overall Quality')
     plt.ylabel('Median Sale Price')
     plt.show()
@@ -72,7 +70,7 @@ def main():
 
     cars_pivot = train.pivot_table(index='GarageCars',
                                    values='SalePrice',aggfunc=np.median)
-    cars_pivot.plot(kind='bar', color='blue')
+    cars_pivot.plot(kind='bar', color='green')
     plt.xlabel('Overall Quality')
     plt.ylabel('Median Sale Price')
     plt.show()
@@ -94,21 +92,21 @@ def main():
 
     year_pivot = train.pivot_table(index='YrSold',
                                     values='SalePrice',aggfunc=np.median)
-    year_pivot.plot(kind='bar', color='blue')
+    year_pivot.plot(kind='bar', color='green')
     plt.xlabel('Year Sold')
     plt.ylabel('Median Sale Price')
     plt.show()
 
     cond_pivot = train.pivot_table(index='OverallCond',
                                     values='SalePrice',aggfunc=np.median)
-    cond_pivot.plot(kind='bar', color='blue')
+    cond_pivot.plot(kind='bar', color='green')
     plt.xlabel('Overall Cond')
     plt.ylabel('Median Sale Price')
     plt.show()
 
     bldg_pivot = train.pivot_table(index='MSSubClass',
                                     values='SalePrice',aggfunc=np.median)
-    bldg_pivot.plot(kind='bar', color='blue')
+    bldg_pivot.plot(kind='bar', color='green')
     plt.xlabel('Building Class')
     plt.ylabel('Median Sale Price')
     plt.show()
@@ -121,11 +119,10 @@ def main():
 
     ktch_pivot = train.pivot_table(index='KitchenAbvGr',
                                     values='SalePrice',aggfunc=np.median)
-    ktch_pivot.plot(kind='bar', color='blue')
+    ktch_pivot.plot(kind='bar', color='green')
     plt.xlabel('Kitchen Above Ground(?)')
     plt.ylabel('Median Sale Price')
     plt.show()
-
 
         # Removing Outliers
 
@@ -172,22 +169,31 @@ def main():
     plt.show()
 
 
+    # Handling Non-Numeric Variables
+    #-------------------------------
+
+    qual_feat = train.select_dtypes(exclude=[np.number])
+    quals = qual_feat.columns.values[np.newaxis]
+    print('Qualitative Variables: \n',quals,'\n')
+
+        # Feature Encoding Module
+
+    import encoder
+    train, test = encoder(train, test)
 
     # Handling Null Values
-    #---------------------
+    # ---------------------
 
-        # Visualizing Nulls
+        # Visualizing
+
     nulls = pd.DataFrame(train.isnull().sum().sort_values(ascending=False)[:25])
     nulls.columns = ['Null Count']
     nulls.index.name = 'PREDICTOR'
     print(nulls)
 
-    # Handling Non-Numeric Variables
-    #-------------------------------
+        # Interpolation
 
-    qual_feat = train.select_dtypes(exclude=[np.number])
-    qual_feat.describe()
-
-
+    data = train.select_dtypes(include=[np.number]).interpolate().dropna()
+    print('\n Interp_NewNulls: \n', sum(data.isnull().sum() != 0))
 
 main()
