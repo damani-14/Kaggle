@@ -38,15 +38,20 @@ def main():
 #------------------
 
     # Quantitative Variables
+    #-----------------------
+
     numeric_features = train.select_dtypes(include = (np.number))
     corr = numeric_features.corr()
 
+
         # Investigating the most positive and most negative correlated variables
+
     print(corr['SalePrice'].sort_values(ascending=False)[:5], '\n')
     print(corr['SalePrice'].sort_values(ascending=False)[-5:], '\n')
 
 
         # Visualizing the Positive Correlations
+
     print("Overall Quality: \n", train.OverallQual.unique(), "\n")
     print("Above Ground Living Area (ft-sq): \n", train.GrLivArea.unique(), "\n")
     print("No. of Cars in Garage: \n", train.GarageCars.unique(), "\n")
@@ -78,7 +83,9 @@ def main():
     plt.show()
     # NOTE: Outliers @ 1200+
 
+
         # Visualizing the Negative Correlations
+
     print('Year Sold: \n', train.YrSold.unique(), '\n')
     print('Overall Condition: \n', train.OverallCond.unique(), '\n')
     print('Building Class: \n', train.MSSubClass.unique(), '\n')
@@ -117,6 +124,51 @@ def main():
     ktch_pivot.plot(kind='bar', color='blue')
     plt.xlabel('Kitchen Above Ground(?)')
     plt.ylabel('Median Sale Price')
+    plt.show()
+
+
+        # Removing Outliers
+
+    livArea = plt.scatter(x=train['GrLivArea'],y=response)
+    plt.xlabel('Above Ground Living Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('LIVING AREA')
+    plt.show()
+
+    train = train[train['GrLivArea'] < 4000]
+    response = np.log(train.SalePrice)
+    livArea = plt.scatter(x=train['GrLivArea'],y=response)
+    plt.xlabel('Above Ground Living Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('Outliers Removed')
+    plt.show()
+
+    garageArea = plt.scatter(x=train['GarageArea'],y=response)
+    plt.xlabel('Garage Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('GARAGE AREA')
+    plt.show()
+
+    train = train[train['GarageArea'] < 1200]
+    response = np.log(train.SalePrice)
+    garageArea = plt.scatter(x=train['GarageArea'],y=response)
+    plt.xlabel('Garage Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('Outliers Removed')
+    plt.show()
+
+    porch_plot = plt.scatter(x=train['EnclosedPorch'],y=response)
+    plt.xlabel('Enclosed Porch Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('ENCLOSED PORCH')
+    plt.show()
+
+    train = train[train['EnclosedPorch'] < 400]
+    response = np.log(train.SalePrice)
+    porch_plot = plt.scatter(x=train['EnclosedPorch'],y=response)
+    plt.xlabel('Enclosed Porch Area (ft^2)')
+    plt.ylabel('Median Sale Price')
+    plt.title('Outliers Removed')
     plt.show()
 
 main()
