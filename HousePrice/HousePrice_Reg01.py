@@ -1,3 +1,19 @@
+# Multiple linear regression model for predicting house prices using data from:
+# Kaggle, House Prices Competition: Advanced Regression Techniques
+    # https://www.kaggle.com/c/house-prices-advanced-regression-techniques
+
+    # Submissions: 1
+    # Kaggle.com Score: 0.12994
+    # Ranking - 08/16/18: 1525 of 4512 (Top 33.8%)
+
+# Required modules
+    # https://github.com/damani-14/Kaggle/blob/master/HousePrice/encoder.py
+    # encoder.py
+
+# Required data sets
+    # https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
+    # train.csv, test.csv
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -195,5 +211,34 @@ def main():
 
     data = train.select_dtypes(include=[np.number]).interpolate().dropna()
     print('\n Interp_NewNulls: \n', sum(data.isnull().sum() != 0))
+
+#---------------
+# Model Building
+#---------------
+
+    y = np.log(train.SalePrice)
+    x = data.drop(['SalePrice', 'Id'], axis=1)
+
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, random_state=42, test_size=.33
+    )
+
+    lr = linear_model.LinearRegression()
+    linReg = lr.fit(x_train, y_train)
+    print('\n\n R-Squared: ', linReg.score(x_test, y_test))
+
+    predictions = linReg.predict(x_test)
+    print('\n\n RMSE: ', mean_squared_error(y_test, predictions))
+
+    actual = y_test
+    plt.scatter(predictions, actual, alpha=.75, color='black')
+    plt.xlabel('Predicted Price')
+    plt.ylabel('Actual Price')
+    plt.title('Linear Regression Model')
+    overlay = 'R-Squared: {}\nRMSE: {}'.format(
+        linReg.score(x_test, y_test),
+        mean_squared_error(y_test, predictions))
+    plt.annotate(s=overlay, xy=(11.7, 10.6))
+    plt.show()
 
 main()
